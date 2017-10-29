@@ -45,7 +45,18 @@ bpy.ops.object.move_to_layer(layers=(False, False, False, False, False, False, F
 bpy.ops.object.text_add(view_align=False, enter_editmode=False, location=(0, 0, 0), layers=(True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False))
 bpy.ops.transform.rotate(value=1.5708, axis=(1, 0, 0), constraint_axis=(True, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
 bpy.context.object.data.extrude = 0.02
-
+# Delete default "Text"
+bpy.ops.object.editmode_toggle()
+bpy.ops.font.delete(type='PREVIOUS_OR_SELECTION')
+bpy.ops.font.delete(type='PREVIOUS_OR_SELECTION')
+bpy.ops.font.delete(type='PREVIOUS_OR_SELECTION')
+bpy.ops.font.delete(type='PREVIOUS_OR_SELECTION')
+bpy.ops.font.delete(type='PREVIOUS_OR_SELECTION')
+# Set new word
+chars = "Digital"
+for char in chars:
+    bpy.ops.font.text_insert(text=char)
+bpy.ops.object.editmode_toggle()
 # add material to the Text
 ob = bpy.context.active_object
 
@@ -62,12 +73,15 @@ if ob.data.materials:
 else:
     # no slots
     ob.data.materials.append(mat)
-# darken the background
-bpy.data.node_groups["Shader Nodetree"].nodes["Background"].inputs[0].default_value = (0, 0, 0, 1)
+
+# text to mesh
+bpy.ops.object.convert(target='MESH')
 # Particle system
 bpy.ops.object.particle_system_add()
 bpy.data.particles["ParticleSettings"].effector_weights.gravity = 0
 bpy.data.particles["ParticleSettings"].render_type = 'OBJECT'
 bpy.data.particles["ParticleSettings"].dupli_object = bpy.data.objects["Basic_Sphere"]
+# darken the background
+#bpy.data.node_groups["Shader Nodetree"].nodes["Background"].inputs[0].default_value = (0, 0, 0, 1)
 # Animate Particle System
 # Move / Animate Sphere
